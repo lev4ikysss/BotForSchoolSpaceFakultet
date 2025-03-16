@@ -8,7 +8,7 @@ class VkMethod :
     def __init__(self, token: str) :
         self.vk = vk_api.VkApi(token=token)
 
-    def send_message(user_id: int, message: str) -> int :
+    def send_message(self, user_id: int, message: str) -> int :
         """
             Отправка сообщения в ВК
             argument - :user_id: - int, id пользователя ВК, которому необходимо отправить сообщение
