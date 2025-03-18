@@ -4,6 +4,7 @@ import random
 class VkMethod :
     """
         Функции для работы с ВК
+        argument - :token: - str, токен для работы в вк
     """
     def __init__(self, token: str) :
         self.vk = vk_api.VkApi(token=token)
