@@ -1,3 +1,4 @@
+"""Утилиты для работы с API приложения Таланты"""
 import requests
 
 class TallantsAPI :
