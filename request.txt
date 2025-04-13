@@ -1,4 +1,0 @@
-vk_api
-vkbottle
-requests
-fastapi[all]
