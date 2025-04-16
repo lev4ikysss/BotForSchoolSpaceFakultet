@@ -1,0 +1,33 @@
+{
+    "Нами выданный ID": {
+        "ID_VK": "INT",
+        "ID_TG": "INT",
+        "REG_DATE": {
+            "YEAR": "INT",
+            "MONTH": "INT",
+            "DAY": "INT",
+            "HOUR": "INT",
+            "MINUTES": "INT",
+            "SECOND": "INT"
+        },
+        "is_admin": "BOOL",
+        "is_don": "BOOL",
+        "is_develop": "BOOL",
+        "score": "INT",
+        "talant": {
+            "ID": "INT",
+            "ROLE": "STRING",
+            "history": [
+                {
+                    "score": "INT",
+                    "date": {
+                        "year": "INT",
+                        "month": "INT",
+                        "day": "INT"
+                    }
+                },
+                "..."
+            ]
+        }
+    }
+}
