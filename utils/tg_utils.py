@@ -1,16 +1,36 @@
 import telebot
 
-API_TOKEN = ''
-bot = telebot.TeleBot("token")
+class TelegramBot:
+    def __init__(self, token: str):
+        self.bot = telebot.TeleBot(token)
 
-@bot.message_handler(commands=['start'])
-def handle_start(message):
-    bot.send_message(message.chat.id, "Привет, я ваш телеграм-бот!")
+    def send_message(self, chat_id: int, message: str) -> int:
+        try:
+            self.bot.send_message(chat_id=chat_id, text=message)
+            return 0
+        except:
+            return 1
 
-bot.polling()
+    def send_keyboard(self, chat_id: int, message: str, keyboard: list) -> int:
+        try:
+            reply_markup = telebot.types.ReplyKeyboardMarkup(keyboard)
+            self.bot.send_message(chat_id=chat_id, text=message, reply_markup=reply_markup)
+            return 0
+        except:
+            return 1
 
-@bot.message_handler(func=lambda message: True)
-def echo_all(message):
-    bot.send_message(message.chat.id, message.text)
+    def add_handler(self, command, function):
+        self.bot.message_handler(commands=[command])(function)
 
-# Этот код отправит обратно все текстовые сообщения, которые получит бот.
+    def run(self):
+        self.bot.polling()
+
+# Пример использования
+if __name__ == '__main__':
+    bot = TelegramBot('token')
+
+    def start(message):
+        bot.send_message(message.chat.id, 'Привет!')
+
+    bot.add_handler('start', start)
+    bot.run()
