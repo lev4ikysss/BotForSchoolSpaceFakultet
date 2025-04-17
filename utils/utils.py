@@ -1,6 +1,8 @@
 """Прочие утилиты"""
 from vkbottle import Keyboard, KeyboardButtonColor, Text, OpenLink
+import json
 import vk_utils
+import datetime
 
 class VKUtils :
     """
@@ -52,6 +54,148 @@ class VKUtils :
                 .row()
                 .add(Text("Я нашёл баг, тупые вы devops!"), color=KeyboardButtonColor.POSITIVE)
                 ).get_json())
+            return 0
+        except :
+            return 1
+        
+class Utils :
+    """
+        Прочие утилиты для работы приложения
+    """
+
+    def get_id(session: str, user_id: int) -> int :
+        """
+            Получение нашего id по id соц. сети
+            argument - :session: - "TG" or "VK" or "OUR", тип сессии id пользователя
+            argument - :user_id: - int, id пользователя
+            answer - 0 <= answer < infinite - int, наш id
+            answer - -1 - int, ошибка 
+        """
+        try :
+            if session == "VK" :
+                with open('data/vk_id.json', 'r') as file :
+                    ident = json.load(file)
+            elif session == "TG" :
+                with open('data/tg_id.json', 'r') as file :
+                    ident = json.load(file)
+            elif session == "OUR" :
+                return user_id
+            else :
+                return -1
+            return ident[f'{user_id}']
+        except :
+            return -1
+
+    def check_permissions(session: str, user_id: int) -> bool :
+        """
+            Проверка на наличие прав администратора у пользователя
+            argument - :session: - "TG" or "VK" or "OUR", тип сессии id пользователя
+            argument - :user_id: - int, id пользователя
+            answer - True - bool, пользователь является администратором
+            answer - False - bool, пользователь не является администратором, или ошибка
+        """
+        try :
+            id = Utils.get_id(session, user_id)
+            with open('data/user_data.json', 'r') as file :
+                users = json.load(file)
+            return users[f'{id}']['is_admin']
+        except :
+            return False
+        
+    def change_permissions(session: str, user_id: int, change: bool) -> int :
+        """
+            Назначение статуса администратора пользователю
+            argument - :session: - "TG" or "VK" or "OUR", тип сессии id пользователя
+            argument - :user_id: - int, id пользователя
+            answer - 0 - int, успех
+            answer - 1 - int, ошибка
+        """
+        try :
+            id = Utils.get_id(session, user_id)
+            with open('data/user_data.json', 'r') as file :
+                users = json.load(file)
+            users[f'{id}']['is_admin'] = change
+            with open('data/user_data.json', 'w') as file :
+                json.dump(users, file)
+            return 0
+        except :
+            return 1
+        
+    def change_don(session: str, user_id: int, change: bool) -> int :
+        """
+            Назначение статуса дона пользователю
+            argument - :session: - "TG" or "VK" or "OUR", тип сессии id пользователя
+            argument - :user_id: - int, id пользователя
+            answer - 0 - int, успех
+            answer - 1 - int, ошибка
+        """
+        try :
+            id = Utils.get_id(session, user_id)
+            with open('data/user_data.json', 'r') as file :
+                users = json.load(file)
+            users[f'{id}']['is_don'] = change
+            with open('data/user_data.json', 'w') as file :
+                json.dump(users, file)
+            return 0
+        except :
+            return 1
+        
+    def change_prestige(session: str, user_id: int, change: bool) -> int :
+        """
+            Назначение статуса разработчика пользователю
+            argument - :session: - "TG" or "VK" or "OUR", тип сессии id пользователя
+            argument - :user_id: - int, id пользователя
+            answer - 0 - int, успех
+            answer - 1 - int, ошибка
+        """
+        try :
+            id = Utils.get_id(session, user_id)
+            with open('data/user_data.json', 'r') as file :
+                users = json.load(file)
+            users[f'{id}']['is_develop'] = change
+            with open('data/user_data.json', 'w') as file :
+                json.dump(users, file)
+            return 0
+        except :
+            return 1
+        
+    def add_user(session: str, user_id: int) -> int :
+        """
+            Добавление пользователя в базу данных
+            argument - :session: - "TG" or "VK", тип сессии id пользователя
+            argument - :user_id: - int, id пользователя
+        """
+        try :
+            if not session in ["TG", "VK"] :
+                return 1
+            date = datetime.datetime.now()
+            with open('data/user_data.json', 'r') as file :
+                users = json.load(file)
+            id = len(users.keys())
+            users[f'{id}'] = {
+                "ID_VK": 0,
+                "ID_TG": 0,
+                "REG_DATE": {
+                    "YEAR": date.year,
+                    "MONTH": date.month,
+                    "DAY": date.day,
+                    "HOUR": date.hour,
+                    "MINUTES": date.minute,
+                    "SECOND": date.second
+                },
+                "is_admin": False,
+                "is_don": False,
+                "is_develop": False,
+                "score": 0,
+                "talant": {
+                    "ID": 0,
+                    "ROLE": "UNKNOWN",
+                    "history": []
+                }
+            }
+            users[f'{id}'][f'ID_{session}'] = user_id
+            with open('data/user_data.json', 'w') as file :
+                json.dump(users, file)
             return 0
         except :
             return 1
