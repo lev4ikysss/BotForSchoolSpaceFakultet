@@ -25,11 +25,3 @@ class TelegramBot:
     def run(self):
         self.bot.polling()
 
-if __name__ == '__main__':
-    bot = TelegramBot('token')
-
-    def start(message):
-        bot.send_message(message.chat.id, 'Привет!')
-
-    bot.add_handler('start', start)
-    bot.run()
