@@ -25,7 +25,6 @@ class TelegramBot:
     def run(self):
         self.bot.polling()
 
-# Пример использования
 if __name__ == '__main__':
     bot = TelegramBot('token')
 
