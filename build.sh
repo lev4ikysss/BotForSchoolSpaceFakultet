@@ -11,6 +11,8 @@ cp -rv * /etc/fakultet
 rm -v /etc/fakultet/config/nginx-config
 rm -v /etc/fakultet/data/data_example.env
 rm -v /etc/fakultet/data/user_data_example.json
+rm -v /etc/fakultet/data/tg_id_example.json
+rm -v /etc/fakultet/data/vk_id_example.json
 rm -v /etc/fakultet/README.md
 rm -v /etc/fakultet/.gitignore
 rm -v /etc/fakultet/req.txt

@@ -1,5 +1,6 @@
 """Прочие утилиты"""
 from vkbottle import Keyboard, KeyboardButtonColor, Text, OpenLink
+import json
 import vk_utils
 
 class VKUtils :
@@ -55,3 +56,45 @@ class VKUtils :
             return 0
         except :
             return 1
+        
+class Utils :
+    """
+        Прочие утилиты для работы приложения
+    """
+
+    def get_id(session: str, user_id: int) -> int :
+        """
+            Получение нашего id по id соц. сети
+            argument - :session: - "TG" or "VK" or "OUR", тип сессии id пользователя
+            argument - :user_id: - int, id пользователя
+            answer - 0 <= answer < infinite - int, наш id
+            answer - -1 - int, ошибка 
+        """
+        try :
+            if session == "VK" :
+                with open('data/vk_id.json', 'r') as file :
+                    ident = json.load(file)
+            elif session == "TG" :
+                with open('data/tg_id.json', 'r') as file :
+                    ident = json.load(file)
+            elif session == "OUR" :
+                return user_id
+            else :
+                return -1
+            return ident[f'{user_id}']
+        except :
+            return -1
+
+    def check_permissions(session: str, user_id: int) -> bool :
+        """
+            Проверка на наличие прав администратора у пользователя
+            argument - :session: - "TG" or "VK" or "OUR", тип сессии id пользователя
+            argument - :user_id: - int, id пользователя
+        """
+        try :
+            id = Utils.get_id(session, user_id)
+            with open('data/user_data.json', 'r') as file :
+                users = json.load(file)
+            return users[f'{id}']['is_admin']
+        except :
+            return False
