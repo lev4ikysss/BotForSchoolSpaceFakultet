@@ -1,19 +1,16 @@
-from telegram import Update
-from telegram.ext import ApplicationBuilder, CommandHandler, ContextTypes
+import telebot
 
-async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    user = update.effective_user
-    await update.message.reply_text('Привет!')
+API_TOKEN = ''
+bot = telebot.TeleBot("token")
 
-def main():
-    # Замените 'YOUR_TOKEN' на токен вашего бота
-    application = ApplicationBuilder().token('7729497145:AAFCTIgmlXgtg7Ufbd5Ia6MWShnz624toec').build()
+@bot.message_handler(commands=['start'])
+def handle_start(message):
+    bot.send_message(message.chat.id, "Привет, я ваш телеграм-бот!")
 
-    # Добавляем обработчик команды /start
-    application.add_handler(CommandHandler('start', start))
+bot.polling()
 
-    # Запускаем бота
-    application.run_polling()
+@bot.message_handler(func=lambda message: True)
+def echo_all(message):
+    bot.send_message(message.chat.id, message.text)
 
-if __name__ == '__main__':
-    main()
+# Этот код отправит обратно все текстовые сообщения, которые получит бот.
