@@ -90,6 +90,8 @@ class Utils :
             Проверка на наличие прав администратора у пользователя
             argument - :session: - "TG" or "VK" or "OUR", тип сессии id пользователя
             argument - :user_id: - int, id пользователя
+            answer - True - bool, пользователь является администратором
+            answer - False - bool, пользователь не является администратором, или ошибка
         """
         try :
             id = Utils.get_id(session, user_id)
@@ -98,3 +100,22 @@ class Utils :
             return users[f'{id}']['is_admin']
         except :
             return False
+        
+    def change_permissions(session: str, user_id: int, change: bool) -> int :
+        """
+            Назначение статуса администратора пользователю
+            argument - :session: - "TG" or "VK" or "OUR", тип сессии id пользователя
+            argument - :user_id: - int, id пользователя
+            answer - 0 - int, успех
+            answer - 1 - int, ошибка
+        """
+        try :
+            id = Utils.get_id(session, user_id)
+            with open('data/user_data.json', 'r') as file :
+                users = json.load(file)
+            users[f'{id}']['is_admin'] = change
+            with open('data/user_data.json', 'w') as file :
+                json.dump(users, file)
+            return 0
+        except :
+            return 1
