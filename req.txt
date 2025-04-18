@@ -1,3 +1,4 @@
 vk_api
 vkbottle
 fastapi[all]
+telebot
