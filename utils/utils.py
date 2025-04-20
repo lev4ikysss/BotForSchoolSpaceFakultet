@@ -196,6 +196,11 @@ class Utils :
             users[f'{id}'][f'ID_{session}'] = user_id
             with open('data/user_data.json', 'w') as file :
                 json.dump(users, file)
+            with open(f'data/{session.lower()}_id.json', 'r') as file :
+                pointer = json.load(file)
+            pointer[f'user_id'] = id
+            with open(f'data/{session.lower()}_id.json', 'w') as file :
+                json.dump(pointer, file)
             return 0
         except :
             return 1
