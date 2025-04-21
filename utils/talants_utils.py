@@ -39,3 +39,27 @@ class TallantsAPI :
             return res
         except :
             return {"response": 1}
+        
+    def get_task(self, type: str) -> dict :
+        """
+            Получить информацию о заданиях
+            argument - :type: - str, "all" или "clan"
+            answer - :{"response": 1}: - dict, ошибка
+            answer - :{"response": ...}: - dict, успех
+        """
+        try :
+            if not type in ["all", "clan"] :
+                return {"response": 1}
+            req = self.request
+            req['offset'] = 0
+            req['count'] = 20
+            req['type'] = type
+            req['role'] = 100
+            req['sort'] = 0
+            req['status'] = 0
+            req['closed'] = 100
+            req['my_type'] = 0
+            res = requests.get(f"{self.url}/tasks.get", req).json()
+            return res
+        except :
+            return {"response": 1}
