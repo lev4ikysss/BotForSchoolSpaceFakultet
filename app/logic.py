@@ -29,7 +29,7 @@ class BotLogic :
             answer - 1 - int, ошибка
         """
         try :
-            message = "Здравствуйте!"
+            message = "Здравствуйте! Вы используете бота факультета МАМБА!"
             if self.session == "VK" :
                 self.vk.send_message(self.id, message)
                 if not self.utils.check_reg(self.session, self.id) :

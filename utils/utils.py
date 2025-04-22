@@ -3,6 +3,7 @@ from vkbottle import Keyboard, KeyboardButtonColor, Text, OpenLink
 import datetime
 import json
 import vk_utils
+import tallants_utils
 
 class VKUtils :
     """
@@ -221,3 +222,12 @@ class Utils :
             return False
         except :
             return False
+        
+class TallantUtils :
+    """
+        Утилиты работающие с талантами
+        argument - :sign: - str, Токен пользователя вк для работы с талантами
+        argument - :url: - str, URL ведущий на таланты
+    """
+    def __init__(self, sign: str, url: str) :
+        self.tallants = tallants_utils.TallantsAPI(sign, url)
