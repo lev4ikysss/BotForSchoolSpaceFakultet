@@ -17,8 +17,10 @@ class BotLogic :
         self.session = session
         if session == "VK":
             self.vk = VkMethod(os.getenv('VK_TOKEN'))
+            self.vk_utils = VKUtils(os.getenv('VK_TOKEN'))
         else :
             self.tg = TgMethod(os.getenv('TG_TOKEN'))
+        self.utils = Utils()
 
     def start(self) -> int :
         """
@@ -30,7 +32,12 @@ class BotLogic :
             message = "Здравствуйте!"
             if self.session == "VK" :
                 self.vk.send_message(self.id, message)
-                
+                if not self.utils.check_reg(self.session, self.id) :
+                    
+                if self.utils.check_permissions(self.session, self.id) :
+                    self.vk_utils.menu_admin(self.id)
+                else :
+                    self.vk_utils.menu(self.id)
             return 0
         except :
             return 1

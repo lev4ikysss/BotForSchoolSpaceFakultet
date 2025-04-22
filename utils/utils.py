@@ -164,6 +164,8 @@ class Utils :
             Добавление пользователя в базу данных
             argument - :session: - "TG" or "VK", тип сессии id пользователя
             argument - :user_id: - int, id пользователя
+            answer - 0 - int, успех
+            answer - 1 - int, ошибка
         """
         try :
             if not session in ["TG", "VK"] :
@@ -204,3 +206,18 @@ class Utils :
             return 0
         except :
             return 1
+        
+    def check_reg(session: str, user_id: int) -> bool :
+        """
+            Проверить, зарегистрирован ли id
+            argument - :session: - "TG" or "VK", тип сессии id пользователя
+            argument - :user_id: - int, id пользователя
+        """
+        try :
+            with open(f'data/{session.lower()}_id.json', 'r') as file :
+                keys = json.load(file).keys()
+            if str(user_id) in keys :
+                return True
+            return False
+        except :
+            return False
