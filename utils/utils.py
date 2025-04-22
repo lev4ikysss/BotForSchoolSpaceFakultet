@@ -1,8 +1,8 @@
 """Прочие утилиты"""
 from vkbottle import Keyboard, KeyboardButtonColor, Text, OpenLink
+import datetime
 import json
 import vk_utils
-import datetime
 
 class VKUtils :
     """
