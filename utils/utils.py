@@ -231,3 +231,20 @@ class TallantUtils :
     """
     def __init__(self, sign: str, url: str) :
         self.tallants = tallants_utils.TallantsAPI(sign, url)
+
+    def check_member(self, user_id: int, fakultet_id: int) -> bool :
+        """
+            Проверить, является ли пользователь участником факультета
+            argument - :user_id: - int, id пользователя VK
+            argument - :fakultet_id: - int, id факультета
+            answer - True - bool, пользователь является участником факультета
+            answer - False - bool, пользователь не является участником факультета 
+        """
+        try :
+            users = self.tallants.get_fakultet_by_id(fakultet_id)['response']['users']
+            for user in users :
+                if user['info']['id_vk'] == user_id :
+                    return True
+            return False
+        except :
+            return False
