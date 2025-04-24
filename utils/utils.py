@@ -248,3 +248,11 @@ class TallantUtils :
             return False
         except :
             return False
+        
+    def get_auth_data(self, user_id: int, fakultet_id: int) -> dict :
+        """
+            Получить данные для аутентификации пользователя
+            argument - :user_id: - int, id пользователя VK
+            argument - :fakultet_id: - int, id факультета
+        """
+        
