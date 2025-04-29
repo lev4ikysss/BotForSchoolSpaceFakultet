@@ -1,8 +1,9 @@
 """Прочие утилиты"""
 from vkbottle import Keyboard, KeyboardButtonColor, Text, OpenLink
+import datetime
 import json
 import vk_utils
-import datetime
+import tallants_utils
 
 class VKUtils :
     """
@@ -159,21 +160,20 @@ class Utils :
         except :
             return 1
         
-    def add_user(session: str, user_id: int) -> int :
+    def add_user(user_id: int) -> int :
         """
-            Добавление пользователя в базу данных
-            argument - :session: - "TG" or "VK", тип сессии id пользователя
+            Добавление пользователя в базу данных, использовать только в вк
             argument - :user_id: - int, id пользователя
+            answer - 0 - int, успех
+            answer - 1 - int, ошибка
         """
         try :
-            if not session in ["TG", "VK"] :
-                return 1
             date = datetime.datetime.now()
             with open('data/user_data.json', 'r') as file :
                 users = json.load(file)
             id = len(users.keys())
             users[f'{id}'] = {
-                "ID_VK": 0,
+                "ID_VK": user_id,
                 "ID_TG": 0,
                 "REG_DATE": {
                     "YEAR": date.year,
@@ -193,9 +193,54 @@ class Utils :
                     "history": []
                 }
             }
-            users[f'{id}'][f'ID_{session}'] = user_id
             with open('data/user_data.json', 'w') as file :
                 json.dump(users, file)
+            with open(f'data/vk_id.json', 'r') as file :
+                pointer = json.load(file)
+            pointer[f'user_id'] = id
+            with open(f'data/vk_id.json', 'w') as file :
+                json.dump(pointer, file)
             return 0
         except :
             return 1
+        
+    def check_reg(session: str, user_id: int) -> bool :
+        """
+            Проверить, зарегистрирован ли id
+            argument - :session: - "TG" or "VK", тип сессии id пользователя
+            argument - :user_id: - int, id пользователя
+        """
+        try :
+            with open(f'data/{session.lower()}_id.json', 'r') as file :
+                keys = json.load(file).keys()
+            if str(user_id) in keys :
+                return True
+            return False
+        except :
+            return False
+        
+class TallantUtils :
+    """
+        Утилиты работающие с талантами
+        argument - :sign: - str, Токен пользователя вк для работы с талантами
+        argument - :url: - str, URL ведущий на таланты
+    """
+    def __init__(self, sign: str, url: str) :
+        self.tallants = tallants_utils.TallantsAPI(sign, url)
+
+    def check_member(self, user_id: int, fakultet_id: int) -> bool :
+        """
+            Проверить, является ли пользователь участником факультета
+            argument - :user_id: - int, id пользователя VK
+            argument - :fakultet_id: - int, id факультета
+            answer - True - bool, пользователь является участником факультета
+            answer - False - bool, пользователь не является участником факультета 
+        """
+        try :
+            users = self.tallants.get_fakultet_by_id(fakultet_id)['response']['users']
+            for user in users :
+                if user['info']['id_vk'] == user_id :
+                    return True
+            return False
+        except :
+            return False
