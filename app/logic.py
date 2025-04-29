@@ -36,13 +36,24 @@ class BotLogic :
         try :
             message = "Здравствуйте! Вы используете бота факультета МАМБА!"
             message_fail = "Вы не являетесь пользователем факультета!"
+            message_error0 = "Произошла ошибка!"
+            message_error1 = "Вы уже зарегистрированы!"
+            message_success = "Поздравляю! Вы успешно зарегистрировались в боте!"
             if self.session == "VK" :
                 self.vk.send_message(self.id, message)
                 if not self.utils.check_reg(self.session, self.id) :
                     if not self.tallants_utils.check_member(self.id, self.id_fakultet) :
                         self.vk.send_message(self.id, message_fail)
                         return 1
-                    
+                    tmp = self.utils.add_user(self.id)
+                    if tmp == 1 :
+                        self.vk.send_message(self.id, message_error0)
+                        del(tmp)
+                        return 1
+                    del(tmp)
+                    self.vk.send_message(self.id, message_success)
+                else :
+                    self.vk.send_message(self.id, message_error1)
                 if self.utils.check_permissions(self.session, self.id) :
                     self.vk_utils.menu_admin(self.id)
                 else :

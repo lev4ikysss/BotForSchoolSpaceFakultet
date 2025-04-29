@@ -160,23 +160,20 @@ class Utils :
         except :
             return 1
         
-    def add_user(session: str, user_id: int) -> int :
+    def add_user(user_id: int) -> int :
         """
-            Добавление пользователя в базу данных
-            argument - :session: - "TG" or "VK", тип сессии id пользователя
+            Добавление пользователя в базу данных, использовать только в вк
             argument - :user_id: - int, id пользователя
             answer - 0 - int, успех
             answer - 1 - int, ошибка
         """
         try :
-            if not session in ["TG", "VK"] :
-                return 1
             date = datetime.datetime.now()
             with open('data/user_data.json', 'r') as file :
                 users = json.load(file)
             id = len(users.keys())
             users[f'{id}'] = {
-                "ID_VK": 0,
+                "ID_VK": user_id,
                 "ID_TG": 0,
                 "REG_DATE": {
                     "YEAR": date.year,
@@ -196,13 +193,12 @@ class Utils :
                     "history": []
                 }
             }
-            users[f'{id}'][f'ID_{session}'] = user_id
             with open('data/user_data.json', 'w') as file :
                 json.dump(users, file)
-            with open(f'data/{session.lower()}_id.json', 'r') as file :
+            with open(f'data/vk_id.json', 'r') as file :
                 pointer = json.load(file)
             pointer[f'user_id'] = id
-            with open(f'data/{session.lower()}_id.json', 'w') as file :
+            with open(f'data/vk_id.json', 'w') as file :
                 json.dump(pointer, file)
             return 0
         except :
@@ -248,11 +244,3 @@ class TallantUtils :
             return False
         except :
             return False
-        
-    def get_auth_data(self, user_id: int, fakultet_id: int) -> dict :
-        """
-            Получить данные для аутентификации пользователя
-            argument - :user_id: - int, id пользователя VK
-            argument - :fakultet_id: - int, id факультета
-        """
-        
