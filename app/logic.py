@@ -58,6 +58,32 @@ class BotLogic :
                     self.vk_utils.menu_admin(self.id)
                 else :
                     self.vk_utils.menu(self.id)
+            elif self.session == "TG" :
+                pass
+                # Для ТГ
+            return 0
+        except :
+            return 1
+        
+    def menu(self) -> int :
+        """
+            Функция для вызова меню
+            answer - 0 - int, успех
+            answer - 1 - int, ошибка
+        """
+        try :
+            message_error = "Вы не зарегистрированы!"
+            if self.session == "VK" :
+                if not self.utils.check_reg(self.session, self.id) :
+                    self.vk.send_message(self.id, message_error)
+                    return 1
+                if self.utils.check_permissions(self.session, self.id) :
+                    self.vk_utils.menu_admin(self.id)
+                else :
+                    self.vk_utils.menu(self.id)
+            elif self.session == "TG" :
+                pass
+                # Для ТГ
             return 0
         except :
             return 1
