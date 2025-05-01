@@ -1,6 +1,6 @@
 import telebot
 
-class TelegramBot:
+class TgMethod:
     """
         Функции для работы с ТГ
         argument - :token: - str, токен для работы в тг
